@@ -1,0 +1,1 @@
+{"name":"Ma Bibliothèque","short_name":"Bibliothèque","description":"Collection personnelle de livres et BD","start_url":"./index.html","scope":"./","display":"standalone","background_color":"#171625","theme_color":"#171625","lang":"fr","icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]}
