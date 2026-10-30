@@ -1,17 +1,14 @@
-# Ma Bibliothèque V1.1.0 — aperçu local NON PUBLIÉ
+# Ma Bibliothèque V2.0.0 — version finale
 
-Cette archive est une **version de travail**, pas une mise à jour validée pour ton Samsung.
+Publication prévue sur GitHub `main` après vérification de la sauvegarde des données.
 
-- Ne pas transférer ces fichiers sur GitHub ni Cloudflare avant la recette.
-- Ne pas effacer les données du site, ni désinstaller la PWA.
-- La collection conserve sa clé `ma-bibliotheque-v1` et son format.
-- Les préférences sont stockées séparément sous `ma-bibliotheque-ui-v1`.
-- Les écritures de fiches et les suppressions utilisent une copie de la collection, enregistrée avant d'être adoptée en mémoire.
-- Le service worker a un cache distinct, basé sur le correctif V1.0.3.
-- Il reste nécessaire de tester le comportement sur Chrome Android, les tris, les filtres, la restauration et l'usage hors ligne avant publication.
+## Fonctions
+Catalogue V1.1, journal de lecture, statistiques et objectifs, prêts, suivi manuel des séries et tomes manquants, ISBN/scanner, souhaits, sauvegardes JSON, mode hors ligne.
 
-## Fichiers
-`index.html`, `sw.js`, `manifest.webmanifest`, `icon.svg`, `README.md`.
+La reconnaissance automatique des séries n'est pas garantie : renseigner manuellement série, numéro et nombre total de tomes. Le scanner ISBN et les catalogues externes nécessitent une connexion.
 
+## Compatibilité
+Les livres restent dans `localStorage` sous `ma-bibliotheque-v1`. Les données supplémentaires V2 utilisent `ma-bibliotheque-v2-extras`. L'export JSON comprend les deux.
 
-Version finale candidate V1.1.0 : libellés de version corrigés, avertissement de remplacement JSON, export préalable déclenché lors de la confirmation. Vérifier le téléchargement de sauvegarde avant de valider un usage en production.
+## Déploiement
+Extraire les cinq fichiers à la racine du dépôt GitHub connecté à Cloudflare Pages. Faire une sauvegarde JSON depuis la production AVANT le commit. Ne pas importer de JSON si la collection apparaît normalement après déploiement.
