@@ -1,5 +1,5 @@
-/* Ma Bibliothèque V1.0.3 — normalize redirect responses before caching. */
-const CACHE = 'ma-bibliotheque-v1-0-3-20261030';
+/* Ma Bibliothèque V1.1.0 FINAL TEST — normalize redirect responses before caching. */
+const CACHE = 'ma-bibliotheque-v1-1-0-release-20261030';
 const APP_SHELL = ['/index.html', '/manifest.webmanifest', '/icon.svg'];
 
 // A cached redirect response cannot be returned to a navigation whose redirect
