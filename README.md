@@ -1,4 +1,4 @@
-# Ma Bibliothèque V1.0
+# Ma Bibliothèque V1.0.1
 
 Application PWA personnelle de catalogue de livres, romans, BD et séries multilingues.
 
@@ -31,3 +31,14 @@ Pour tester localement sur ordinateur : `python -m http.server 8000` puis `http:
 `{"version":1,"books":[{"id":"...","title":"...","authors":"...", ...}]}`
 
 Le fichier JSON peut être restauré dans l'onglet Plus. La restauration remplace la collection existante après confirmation.
+
+## Mise à jour V1.0.1 (Cloudflare Pages)
+Remplacer uniquement les cinq fichiers du dépôt Ma-bibliotheque, sans changer le domaine ni effacer les données du site. Le cache de navigation fonctionne hors connexion après une première ouverture en ligne et activation du service worker. Les couvertures distantes et la recherche ISBN exigent Internet. Une barre de progression est visible sur les cartes des livres En cours lorsque le total de pages est renseigné. Exporter une sauvegarde JSON avant la mise à jour.
+
+
+## V1.0.2
+- Cache la page racine et index.html sous des clés absolues pour une navigation hors connexion.
+- Vérifie le précache avant activation et évite de supprimer les anciens caches avant installation réussie.
+- Indique si le mode hors connexion n’est pas prêt.
+- Ne modifie ni la clé localStorage (`ma-bibliotheque-v1`) ni les données.
+- Validation requise sur Samsung : première ouverture en ligne, fermeture, mode avion, relancement.

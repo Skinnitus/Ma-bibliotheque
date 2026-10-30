@@ -1,44 +1,47 @@
-/* Ma Bibliothèque V1.0.1 — cache applicatif, aucune modification du stockage local. */
-const CACHE = 'ma-bibliotheque-v1-0-1-20261030';
-const CORE = ['./index.html', './manifest.webmanifest', './icon.svg'];
+/* Ma Bibliothèque V1.0.2 — offline-first app shell; user data stays in localStorage. */
+const CACHE = 'ma-bibliotheque-v1-0-2-20261030';
+const APP_SHELL = ['/', '/index.html', '/manifest.webmanifest', '/icon.svg'];
 self.addEventListener('install', event => {
   event.waitUntil((async () => {
     const cache = await caches.open(CACHE);
-    await cache.addAll(CORE.map(path => new Request(path, {cache: 'reload'})));
+    // Cache the entry page under BOTH URLs; fail install if it cannot be cached.
+    for (const path of APP_SHELL) {
+      const response = await fetch(new Request(path, {cache:'reload'}));
+      if (!response.ok || response.type === 'opaque') throw new Error('Precache failed: ' + path + ' ' + response.status);
+      await cache.put(path, response);
+    }
     await self.skipWaiting();
   })());
 });
 self.addEventListener('activate', event => {
   event.waitUntil((async () => {
+    const cache = await caches.open(CACHE);
+    if (!await cache.match('/index.html')) throw new Error('Offline entry missing');
     const names = await caches.keys();
-    await Promise.all(names.filter(name => name.startsWith('ma-bibliotheque-') && name !== CACHE).map(name => caches.delete(name)));
+    await Promise.all(names.filter(n => n.startsWith('ma-bibliotheque-') && n !== CACHE).map(n => caches.delete(n)));
     await self.clients.claim();
   })());
 });
 self.addEventListener('fetch', event => {
-  const request = event.request;
-  if (request.method !== 'GET') return;
-  const url = new URL(request.url);
+  const req = event.request;
+  if (req.method !== 'GET') return;
+  const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
-  if (request.mode === 'navigate') {
+  if (req.mode === 'navigate') {
     event.respondWith((async () => {
-      try {
-        const response = await fetch(request);
-        if (response.ok) {
-          const cache = await caches.open(CACHE);
-          await cache.put('./index.html', response.clone());
-        }
-        return response;
-      } catch (_) {
-        const cache = await caches.open(CACHE);
-        return (await cache.match('./index.html')) || Response.error();
+      const cache = await caches.open(CACHE);
+      // Always use cached app shell for navigations, including the installed PWA.
+      const offlinePage = await cache.match('/index.html') || await cache.match('/');
+      if (offlinePage) return offlinePage;
+      try { return await fetch(req); } catch (e) {
+        return new Response('<!doctype html><html lang="fr"><meta charset="utf-8"><title>Ma Bibliothèque</title><body><h1>Application indisponible hors connexion</h1><p>Reconnectez-vous une fois pour installer les fichiers hors ligne. Vos livres ne sont pas effacés.</p></body></html>', {status:503, headers:{'Content-Type':'text/html; charset=utf-8'}});
       }
     })());
     return;
   }
   event.respondWith((async () => {
-    const cached = await caches.match(request);
+    const cached = await caches.match(req);
     if (cached) return cached;
-    try { return await fetch(request); } catch (_) { return Response.error(); }
+    try { return await fetch(req); } catch (e) { return Response.error(); }
   })());
 });
