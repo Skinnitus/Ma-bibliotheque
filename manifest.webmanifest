@@ -1,18 +1,18 @@
 
 {
-  "id": "/Ma-bibliotheque/",
+  "id": "/",
   "name": "Ma Bibliothèque",
   "short_name": "Bibliothèque",
   "description": "Collection personnelle de livres et BD",
-  "start_url": "/Ma-bibliotheque/",
-  "scope": "/Ma-bibliotheque/",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#171625",
   "theme_color": "#171625",
   "lang": "fr",
   "icons": [
     {
-      "src": "icon.svg",
+      "src": "/icon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"
