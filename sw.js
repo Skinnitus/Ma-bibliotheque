@@ -1,5 +1,5 @@
 /* Ma Bibliothèque V2.0.0 — normalize redirect responses before caching. */
-const CACHE = 'ma-bibliotheque-v2-0-0-final-20261031';
+const CACHE = 'ma-bibliotheque-v2-0-0-network-first-20261031';
 const APP_SHELL = ['/index.html', '/manifest.webmanifest', '/icon.svg'];
 
 // A cached redirect response cannot be returned to a navigation whose redirect
@@ -49,13 +49,18 @@ self.addEventListener('fetch', event => {
   if (url.origin !== self.location.origin) return;
   if (request.mode === 'navigate') {
     event.respondWith((async () => {
+      const cache = await caches.open(CACHE);
       try {
-        const cache = await caches.open(CACHE);
+        // Network-first prevents an outdated installed PWA from staying pinned
+        // to an old index.html after a successful Cloudflare deployment.
+        const response = await fetch(new Request('/index.html', {cache: 'no-store', redirect: 'follow'}));
+        const page = await normalized(response, '/index.html');
+        await cache.put('/index.html', page.clone());
+        await cache.put('/', page.clone());
+        return page;
+      } catch (error) {
         const page = await cache.match('/index.html');
         if (page) return page;
-        const response = await fetch(request);
-        return await normalized(response, request.url);
-      } catch (error) {
         return new Response('<!doctype html><html lang="fr"><meta charset="utf-8"><title>Ma Bibliothèque</title><body><h1>Application indisponible</h1><p>Reconnectez-vous pour préparer le mode hors connexion. Vos livres ne sont pas effacés.</p></body></html>', {status: 503, headers: {'Content-Type': 'text/html; charset=utf-8'}});
       }
     })());

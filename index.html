@@ -141,7 +141,7 @@ persistUI();updateResults()});if(localStorage.getItem(THEME)==='light')document.
       const ready = await Promise.race([navigator.serviceWorker.ready, new Promise((_,reject)=>setTimeout(()=>reject(new Error('Délai SW dépassé')),12000))]);
       const controlled = !!navigator.serviceWorker.controller;
       const keys = await caches.keys();
-      const cached = keys.includes('ma-bibliotheque-v2-0-0-release-20261030') && !!(await (await caches.open('ma-bibliotheque-v2-0-0-release-20261030')).match('/index.html'));
+      const cached = keys.includes('ma-bibliotheque-v2-0-0-network-first-20261031') && !!(await (await caches.open('ma-bibliotheque-v2-0-0-network-first-20261031')).match('/index.html'));
       console.info('Ma Bibliothèque hors ligne :', {controlled,cached,scope:ready.scope});
       if (!cached) toast('Mode hors connexion non prêt : vérifier le cache');
     })
